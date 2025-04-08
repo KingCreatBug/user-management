@@ -1,0 +1,12 @@
+--  Chức năng add user
+b1: Xử lý form
+b2: Xử lý sự kiện submit => dispatch action lên store
+b3: Xử lý action => mutation (update)
+b4: Lấy state để show ra view
+
+--  Chức năng remove user
+b1: Xác định component chứa button remove (userItem)
+b2: Xử lý sự kiện click button remove => dispatch action (kèm id user)
+b3: Lên store, xử lý action => commit mutation (xóa và cập nhật lại state)
+b4: Lấy state để show ra view
+
