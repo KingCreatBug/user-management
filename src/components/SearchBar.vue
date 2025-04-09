@@ -23,19 +23,18 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { ref } from 'vue'
+import { createNamespacedHelpers, useStore } from 'vuex'
 const { mapActions } = createNamespacedHelpers('user')
 
 export default {
-  state() {
-    return {
-      searchName: '',
+  setup() {
+    const store = useStore()
+    const searchName = ref('')
+    const handleClickSearch = () => {
+      store.dispatch('user/setSearchNameAction', searchName.value)
     }
-  },
-  methods: {
-    ...mapActions({
-      handleClickSearch: 'setSearchNameAction',
-    }),
+    return { searchName, handleClickSearch }
   },
 }
 </script>

@@ -5,30 +5,29 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import UserItem from './UserItem.vue'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters, mapState, mapActions } = createNamespacedHelpers('user')
 
 export default {
   components: {
     UserItem,
   },
-  computed: {
-    ...mapGetters({
-      userListBySearchName: 'userListBySearchName',
-    }),
 
-    ...mapState({
-      userList: (state) => state.userList,
-    }),
-  },
-  methods: {
-    ...mapActions({
-      getAllUser: 'getAllUserAction',
-    }),
-  },
-  created() {
-    this.getAllUser()
+  setup() {
+    const store = useStore()
+    const userListBySearchName = computed(() => store.getters['user/userListBySearchName'])
+    const getAllUser = () => {
+      store.dispatch('user/getAllUserAction')
+    }
+
+    getAllUser()
+
+    const userList = () => {
+      return store.state.userList
+    }
+
+    return { userListBySearchName, userList }
   },
 }
 </script>

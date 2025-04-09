@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import FormUser from './FormUser.vue'
 import SearchBar from './SearchBar.vue'
 import UserList from './UserList.vue'
@@ -51,18 +52,16 @@ export default {
     SearchBar,
     UserList,
   },
-  data() {
-    return {
-      isOpenModalCartList: false, // đóng modal
+  setup() {
+    const isOpenModalCartList = ref(false)
+    const handleCloseModalCartList = () => {
+      isOpenModalCartList.value = false
     }
-  },
-  methods: {
-    handleOpenModalCartList() {
-      this.isOpenModalCartList = true // mở modal
-    },
-    handleCloseModalCartList() {
-      this.isOpenModalCartList = false // đóng modal
-    },
+    const handleOpenModalCartList = () => {
+      isOpenModalCartList.value = true
+    }
+
+    return { isOpenModalCartList, handleOpenModalCartList, handleCloseModalCartList }
   },
 }
 </script>

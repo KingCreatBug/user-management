@@ -171,43 +171,60 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapActions } = createNamespacedHelpers('user')
+import { watch, reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
 export default {
   props: {
     userInfo: Object,
   },
-  data() {
-    return {
-      user: {
-        name: '',
-        age: '',
-        avatar: '',
-        programmingLanguage: [],
-        gender: 'Nam',
-        typeUser: 'CLIENT',
-        description: '',
+  setup(props) {
+    const store = useStore()
+    const { userInfo } = toRefs(props)
+    const user = reactive({
+      name: '',
+      age: '',
+      avatar: '',
+      programmingLanguage: [],
+      gender: 'Nam',
+      typeUser: 'CLIENT',
+      description: '',
+    })
+
+    // Chuyen doi props thanh reactive
+    watch(
+      userInfo,
+      (newVal) => {
+        if (newVal) {
+          user.id = newVal.id
+          user.name = newVal.name
+          user.age = newVal.age
+          user.avatar = newVal.avatar
+          user.programmingLanguage = [...newVal.programmingLanguage]
+          user.gender = newVal.gender
+          user.typeUser = newVal.typeUser
+          user.description = newVal.description
+        }
       },
+      { immediate: true },
+    )
+
+    const handleUpdateUser = (user) => {
+      store.dispatch('user/updateUserAction', user)
     }
-  },
-  methods: {
-    handleSubmit() {
-      if (this.userInfo) {
-        this.handleUpdateUser(this.user)
+
+    const handleAddUser = (user) => {
+      store.dispatch('user/addUserAction', user)
+    }
+
+    const handleSubmit = () => {
+      if (user.id) {
+        handleUpdateUser(user)
       } else {
-        this.handleAddUser(this.user)
+        handleAddUser(user)
       }
-    },
-    ...mapActions({
-      handleAddUser: 'addUserAction',
-      handleUpdateUser: 'updateUserAction',
-    }),
-  },
-  created() {
-    // Chuyển đổi props thành data
-    if (this.userInfo) {
-      this.user = { ...this.userInfo }
     }
+
+    return { user, handleSubmit }
   },
 }
 </script>

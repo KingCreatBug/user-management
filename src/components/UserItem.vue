@@ -39,33 +39,43 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { ref, toRefs } from 'vue'
+import { createNamespacedHelpers, useStore } from 'vuex'
 const { mapActions } = createNamespacedHelpers('user')
 import FormUser from './FormUser.vue'
 
 export default {
-  name: 'UserItem',
   props: {
-    user: Object,
+    user: {
+      type: Object,
+      required: true,
+    },
   },
   components: {
     FormUser,
   },
-  data() {
-    return {
-      isModalEdit: false,
+  setup(props) {
+    const store = useStore()
+    const { user } = toRefs(props)
+    const isModalEdit = ref(false)
+
+    const handleCloseModalEdit = () => {
+      isModalEdit.value = false
     }
-  },
-  methods: {
-    handleCloseModalEdit() {
-      this.isModalEdit = false
-    },
-    handleOpenModalEdit() {
-      this.isModalEdit = true
-    },
-    ...mapActions({
-      handleRemoveUser: 'removeUserAction',
-    }),
+    const handleOpenModalEdit = () => {
+      isModalEdit.value = true
+    }
+    const handleRemoveUser = () => {
+      store.dispatch('user/removeUserAction', user.value.id)
+    }
+
+    return {
+      isModalEdit,
+      user,
+      handleCloseModalEdit,
+      handleOpenModalEdit,
+      handleRemoveUser,
+    }
   },
 }
 </script>
